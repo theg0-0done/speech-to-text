@@ -37,7 +37,7 @@ app.post('/api/translate', async (req, res) => {
 });
 
 // AssemblyAI V3 streaming token endpoint
-app.post('/api/assemblyai-token', async (req, res) => {
+app.post('/api/assemblyai-token', async (_req, res) => {
   try {
     const apiKey = process.env.ASSEMBLYAI_API_KEY || process.env.VITE_ASSEMBLYAI_API_KEY || '';
     
