@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Speech to Text</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <h1>Speech to Text</h1>
+      </header>
+
+      <div class="controls">
+        <div class="control-group">
+          <label for="engine-select">Engine</label>
+          <select id="engine-select">
+            <option value="assemblyai" selected>AssemblyAI (Real-time Streaming)</option>
+            <option value="groq">Groq Whisper</option>
+            <option value="web">Web Speech API</option>
+          </select>
+        </div>
+        
+        <div class="control-group">
+          <label for="lang-select">Language</label>
+          <select id="lang-select">
+            <option value="ar-SA" selected>Arabic (ar-SA)</option>
+            <option value="en-US">English (en-US)</option>
+            <option value="fr-FR">French (fr-FR)</option>
+            <option value="de-DE">German (de-DE)</option>
+          </select>
+        </div>
+
+        <div class="control-group translate-toggle-group">
+          <label for="translate-toggle">Translate</label>
+          <label class="toggle-switch" id="translate-toggle-label">
+            <input type="checkbox" id="translate-toggle" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="control-group hidden" id="translate-target-group">
+          <label for="translate-target-select">Translate to</label>
+          <select id="translate-target-select">
+            <option value="ar" selected>Arabic</option>
+            <option value="en">English</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="es">Spanish</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="mic-btn" class="mic-btn" aria-label="Start recording" aria-pressed="false">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="40" height="40" aria-hidden="true">
+          <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/>
+          <path d="M19 10a1 1 0 0 0-2 0 5 5 0 0 1-10 0 1 1 0 0 0-2 0 7 7 0 0 0 6 6.92V19H9a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2h-2v-2.08A7 7 0 0 0 19 10z"/>
+        </svg>
+      </button>
+
+      <div id="status-container" class="status-container hidden">
+        <div class="recording-indicator">
+          <span id="recording-dot" class="pulse-dot hidden"></span> <span id="recording-text">Recording...</span> <span class="chunk-info" id="chunk-info-span">(Chunk <span id="chunk-counter">0</span>)</span>
+        </div>
+        <div id="detected-lang-container" class="detected-lang hidden">
+          Detected: <span id="detected-lang-value">...</span>
+        </div>
+      </div>
+
+      <!-- Transcript + Translation panels wrapper -->
+      <div id="panels-wrapper" class="panels-wrapper">
+        <div class="panel-column panel-transcript">
+          <div id="transcript" class="transcript" aria-live="polite" aria-label="Transcript"></div>
+        </div>
+        <div class="panel-column panel-translation hidden" id="translation-panel">
+          <div class="translation-header">
+            <span class="translation-label">Translation</span>
+            <span class="translation-lang-badge" id="translation-lang-badge">EN</span>
+            <span class="translation-spinner hidden" id="translation-spinner"></span>
+          </div>
+          <div id="translation-box" class="transcript translation-box" aria-live="polite" aria-label="Translation"></div>
+          <div class="translation-actions">
+            <button id="copy-translation-btn" class="translation-action-btn" title="Copy translation">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button id="copy-btn">Copy</button>
+        <button id="clear-btn">Clear</button>
+      </div>
+
+      <div id="error-msg" class="error hidden" role="alert"></div>
+      
+      <div id="toast-container" class="toast-container"></div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
