@@ -21,7 +21,7 @@ export async function translateText(
   console.log(`[Translate] langpair: ${sourceLang}|${targetLang}`);
 
   try {
-    const res = await fetch('http://localhost:3001/api/translate', {
+    const res = await fetch('https://speechtotext-kvnp.onrender.com/api/translate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, sourceLang, targetLang }),
