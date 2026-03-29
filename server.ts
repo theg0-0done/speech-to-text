@@ -1,17 +1,24 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3001;
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 app.use(cors({
   origin: ['https://speechtotext.fatehsaid.com', 'http://localhost:5173']
 }));
 
 app.use(express.json());
+
+// Serve static frontend files
+app.use(express.static(__dirname));
 
 // MyMemory Translation proxy endpoint
 app.post('/api/translate', async (req, res) => {
@@ -86,6 +93,11 @@ app.post('/api/assemblyai-token', async (_req, res) => {
   }
 });
 
+// SPA fallback — serve index.html for any non-API route
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.listen(PORT, () => {
-  console.log(`Proxy server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
